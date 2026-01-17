@@ -3,9 +3,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Animator playerAnim;
+    private AudioSource playerAudioSource;
 
     public ParticleSystem explosionParticle;
     public ParticleSystem dirtParticle;
+
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
+
     public float jumpForce = 100;
     public float gravityModifier = 1;
     public bool isGrounded = true;
@@ -18,6 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<Animator>();
+        playerAudioSource = GetComponent<AudioSource>();
         Physics.gravity *= gravityModifier;
     }
 
@@ -29,6 +35,7 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
             playerAnim.SetTrigger("Jump_trig");
+            playerAudioSource.PlayOneShot(jumpSound, 1.0f);
             dirtParticle.Stop();
         }
     }
@@ -47,7 +54,7 @@ public class PlayerController : MonoBehaviour
             
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
-
+            playerAudioSource.PlayOneShot(crashSound, 1.0f);
             explosionParticle.Play();
             dirtParticle.Stop();
         }
