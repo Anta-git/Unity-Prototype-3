@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float jumpForce = 10;
+    public float jumpForce = 100;
     public float gravityModifier = 1;
     public bool isGrounded = true;
     public bool isSprinting = true;
+    public bool gameOver = false;
 
     private Rigidbody playerRb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,6 +29,13 @@ public class PlayerController : MonoBehaviour
     //OnCollisionEnter is called automatically when this collider touches another collider
     private void OnCollisionEnter(Collision collision)
     {
-        isGrounded=true;
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        } else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+        }
     }
 }
